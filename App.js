@@ -1,19 +1,26 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { createStackNavigator} from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
+import Home from './src/screens/Home';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
-}
+// we will use these two screens later in our AppNavigator
+import AddItem from './src/screens/AddItem';
+import List from './src/screens/List';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const AppNavigator = createStackNavigator(
+  {
+    Home,
+    AddItem,
+    List
   },
-});
+  {
+    initialRouteName: 'Home'
+  }
+);
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends Component {
+  render() {
+    return <AppContainer />;
+  }
+}

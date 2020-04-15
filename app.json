@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "FinalProject2",
-    "slug": "FinalProject2",
+    "name": "FinalProject",
+    "slug": "FinalProject",
+    "privacy": "public",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
