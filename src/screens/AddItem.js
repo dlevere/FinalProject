@@ -5,26 +5,28 @@ import {
   TouchableHighlight,
   StyleSheet,
   Picker,
-  Alert
+  Alert,
+  TextInput
 } from 'react-native';
 
 import { db } from '../config';
 
 
-let addItem = item => {
-  db.ref('/items').push({
-    name: item
+
+let addItem = (asset, serial, model) => {
+  db.ref('/Equipment').push({
+    asset: asset,
+    serial: serial,
+    model: model
   });
 };
 
 export default class AddItem extends Component {
   state = {
     name: '',
-    asset: ''
-  }
-
-  state = {
-    serial: ''
+    asset: 'PC',
+    serial: '',
+    model: ''
   }
 
   updateAsset = (asset) => {
@@ -37,16 +39,17 @@ export default class AddItem extends Component {
     });
   };
   handleSubmit = () => {
-    addItem(this.state.name);
+    addItem(this.state.asset, this.state.serial, this.state.model);
     Alert.alert('Item saved successfully');
   };
 
   render() {
     return (
       <View style={styles.main}>
+
         <Text style={styles.title}>Asset Type</Text>
         <Picker
-        style={{marginBottom: 50, marginLeft: 20}}
+        style={{marginBottom: 20, marginLeft: 20, width: 200, alignSelf: 'center'}}
           selectedValue={this.state.asset}  
           onValueChange={this.updateAsset}>  
         <Picker.Item label="PC" value= "PC" />  
@@ -56,6 +59,23 @@ export default class AddItem extends Component {
         <Picker.Item label="Tablet" value="Tablet" />  
         <Picker.Item label="Phone" value="Phone" /> 
         </Picker>
+
+        <Text style={styles.title}>Asset Model</Text>
+        <TextInput
+        style={styles.itemInput}
+        label='Model'
+        value={this.state.model}
+        onChangeText={model => this.setState({ model })}
+        />
+
+        <Text style={styles.title}>Serial Number</Text>
+        <TextInput
+        style={styles.itemInput}
+        label='Serial'
+        value={this.state.serial}
+        onChangeText={serial => this.setState({ serial })}
+        />
+        
         <TouchableHighlight
           style={styles.button}
           underlayColor="white"
@@ -74,7 +94,7 @@ const styles = StyleSheet.create({
     padding: 30,
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: '#6565fc'
+    backgroundColor: '#D2B48C'
   },
   title: {
     marginBottom: 20,
@@ -82,30 +102,32 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   itemInput: {
-    height: 50,
+    height: 40,
     padding: 4,
     marginRight: 5,
+    marginBottom: 10,
     fontSize: 23,
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: 'black',
     borderRadius: 8,
-    color: 'white'
+    backgroundColor: 'white'
   },
   buttonText: {
     fontSize: 18,
-    color: '#111',
+    color: '#FFFFFF',
     alignSelf: 'center'
   },
   button: {
     height: 45,
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: '#800020',
     borderColor: 'white',
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 10,
     marginTop: 10,
     alignSelf: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    fontWeight: "bold"
   }
 });
