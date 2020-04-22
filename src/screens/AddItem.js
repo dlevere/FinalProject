@@ -21,7 +21,7 @@ let addItem = (asset, serial, model) => {
   });
 };
 
-export default class AddItem extends Component {
+export default class AddItem extends Component{
   state = {
     name: '',
     asset: 'PC',

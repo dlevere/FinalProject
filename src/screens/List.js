@@ -1,7 +1,19 @@
-import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, Linking, FlatList, TouchableOpacity, Image } from 'react-native';
+import React, { useState, Component } from 'react';
+import {
+  View,
+  Text,
+  TouchableHighlight,
+  StyleSheet,
+  Picker,
+  Alert,
+  TextInput,
+  ActivityIndicator, 
+  Linking, 
+  FlatList, 
+  TouchableOpacity
+} from 'react-native';
 
-export default class List extends Component {
+export default class List extends Component{
 
 constructor(props)
 {
@@ -60,5 +72,19 @@ render() {
   }  
 }
 
-
 }
+
+const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    padding: 30,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: '#D2B48C'
+  },
+  title: {
+    marginBottom: 20,
+    fontSize: 25,
+    textAlign: 'center'
+  }
+});
