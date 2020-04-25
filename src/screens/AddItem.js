@@ -12,7 +12,7 @@ import {
 import { db } from '../config';
 
 
-
+// Adds items into database
 let addItem = (asset, serial, model) => {
   db.ref('/Equipment').push({
     asset: asset,
@@ -22,17 +22,22 @@ let addItem = (asset, serial, model) => {
 };
 
 export default class AddItem extends Component{
-  state = {
+  state = { 
     name: '',
+    // Holds asset type
     asset: 'PC',
+    // Holds serial number
     serial: '',
+    // Holds asset model
     model: ''
   }
 
+  // Updates asset type
   updateAsset = (asset) => {
     this.setState({ asset: asset })
  }
 
+ // adds items to database
   handleChange = e => {
     this.setState({
       name: e.nativeEvent.text
@@ -43,6 +48,7 @@ export default class AddItem extends Component{
     Alert.alert('Item saved successfully');
   };
 
+  // Renders physical view of add item form
   render() {
     return (
       <View style={styles.main}>

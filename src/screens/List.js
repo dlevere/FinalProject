@@ -6,20 +6,26 @@ import { db, db1 } from '../config';
 
 export default class List extends Component {
 
+
 state = {
+  // Holds item info
   assetList: [],
+  // Holds asset ID's
   keyList: [],
+  // Variable used to change listview
   filter: '',
+  // Hilds asset ID value
   key: ''
 }
 
+// Updates the filter variable
 updateFilter = (filter) => {
   this.setState({ filter: filter })
 }
 
 
 
-
+// Used to present a view of the items in list
 _renderItem = ({item}) => (
   <TouchableOpacity onPress={() => Alert.alert(
     'Info',
@@ -62,7 +68,7 @@ _renderItem3 = ({item} ) => (
   </TouchableOpacity>
 );
 
-
+// Attempts to grap asset key based on the serial number and delete the asset
 func(item){
   this.setState({key: db.ref("/Equipment").child(item).push().key})
   console.log(this.state.key);
@@ -70,6 +76,7 @@ func(item){
   console.log("/Equipment/" + this.state.key);
 }
 
+// Pulls the data from database and stores it into arrays
 componentDidMount() {
   db.ref('/Equipment').on('value', (snapshot) => {
     let data = snapshot.val();
@@ -82,7 +89,7 @@ componentDidMount() {
 }
 
 
-
+//Provides physical view of the asset list
   render() {
     if(this.state.filter == "model"){
     return (

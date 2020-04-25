@@ -1,8 +1,14 @@
+// Donovan LeVere
+// Final project
+// 4/24/20
+
+
 import React, { Component } from 'react';
 import { Button, View, Text, StyleSheet, Image } from 'react-native';
 
 export default class Home extends Component {
   render() { 
+    // Main page that navigates to other pages.
     return (
       <View style={styles.container}>
         <Image 
