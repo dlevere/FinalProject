@@ -68,7 +68,7 @@ _renderItem3 = ({item} ) => (
   </TouchableOpacity>
 );
 
-// Attempts to grap asset key based on the serial number and delete the asset
+// Attempts to grab asset key based on the serial number and delete the asset
 func(item){
   this.setState({key: db.ref("/Equipment").child(item).push().key})
   console.log(this.state.key);
