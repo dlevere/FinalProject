@@ -1,90 +1,206 @@
-import React, { useState, Component } from 'react';
-import {
-  View,
-  Text,
-  TouchableHighlight,
-  StyleSheet,
-  Picker,
-  Alert,
-  TextInput,
-  ActivityIndicator, 
-  Linking, 
-  FlatList, 
-  TouchableOpacity
-} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, FlatList, ScrollView, StyleSheet, TouchableOpacity, Alert, Picker} from 'react-native';
 
-export default class List extends Component{
+import { db, db1 } from '../config';
 
-constructor(props)
-{
-  super(props);
-  this.state={
-    isLoading: true,
-    dataSource: null,
-  }
+
+export default class List extends Component {
+
+state = {
+  assetList: [],
+  keyList: [],
+  filter: '',
+  key: ''
 }
 
-// Grabs the data from the website
-componentDidMount(){
-  return fetch('https://finalproject-d3ed6.firebaseio.com/items.json')
-    .then ((response) => response.json())
-    .then ((responseJson) => {
-
-      this.setState({
-        isLoading: false,
-        dataSource: responseJson.results,
-      })
-    })
-
-    .catch((error) => {
-      console.log(error)
-    });
+updateFilter = (filter) => {
+  this.setState({ filter: filter })
 }
+
+
+
 
 _renderItem = ({item}) => (
-  <Text>
-  {item.asset}
-  {item.model}
-  {item.serial}
-  </Text>    
+  <TouchableOpacity onPress={() => Alert.alert(
+    'Info',
+    'Serial#: ' + item.serial + "\nAsset: " + item.asset + "\nModel: " + item.model,
+    [
+      {text: 'Delete Item', onPress: () => this.func(item.serial)},
+      {text: 'Exit', onPress: () => console.warn('Exit Pressed')},
+    ],
+    { cancelable: false }
+  )}>
+  <Text style={styles.content}>Serial#: {item.serial}</Text> 
+  </TouchableOpacity>
 );
 
-render() {
-  if(this.state.isLoading){
+_renderItem2 = ({item}) => (
+  <TouchableOpacity onPress={() => Alert.alert(
+    'Info',
+    'Serial#: ' + item.serial + "\nAsset: " + item.asset + "\nModel: " + item.model,
+    [
+      {text: 'Delete Item', onPress: () => this.func(item.serial)},
+      {text: 'Exit', onPress: () => console.warn('Exit Pressed')},
+    ],
+    { cancelable: false }
+  )}>
+  <Text style={styles.content}>Asset Model: {item.model}</Text> 
+  </TouchableOpacity>
+);
 
-    return (
-      <View>
-        <ActivityIndicator />
-      </View>
-    )
-  } 
-  else {
-    return(
-      <View>
-        <Text style={styles.title}>Items Within Inventory</Text>
-        <FlatList
-        data={this.state.dataSource}
-        renderItem={this._renderItem}
-        keyExtractor={(item, index) => index}
-        />
-      </View>
-    );
-  }  
+_renderItem3 = ({item} ) => (
+  <TouchableOpacity onPress={() => Alert.alert(
+    'Info',
+    'Serial#: ' + item.serial + "\nAsset: " + item.asset + "\nModel: " + item.model,
+    [
+      {text: 'Delete Item', onPress: () => this.func(item.serial)},
+      {text: 'Exit', onPress: () => console.warn('Exit Pressed')},
+    ],
+    { cancelable: false }
+  )}>
+  <Text style={styles.content}>Asset Type: {item.asset}</Text> 
+  </TouchableOpacity>
+);
+
+
+func(item){
+  this.setState({key: db.ref("/Equipment").child(item).push().key})
+  console.log(this.state.key);
+  db.ref("/Equipment/" + this.state.key).remove();
+  console.log("/Equipment/" + this.state.key);
 }
 
+componentDidMount() {
+  db.ref('/Equipment').on('value', (snapshot) => {
+    let data = snapshot.val();
+    let assetList = Object.values(data);
+    let keyList = Object.keys(data);
+    console.log(keyList)
+    this.setState({assetList});
+    this.setState({keyList});
+  });
+}
+
+
+
+  render() {
+    if(this.state.filter == "model"){
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Asset Inventory</Text>
+        <Text>View By</Text>
+        <Picker
+        style={{marginBottom: 20, marginLeft: 20, width: 200, alignSelf: 'center'}}
+          selectedValue={this.state.filter}  
+          onValueChange={this.updateFilter}>  
+        <Picker.Item label="Serial" value= "serial" />  
+        <Picker.Item label="Asset Type" value="asset" />  
+        <Picker.Item label="Asset Model" value="model" />  
+        </Picker>
+          {
+              this.state.assetList.length > 0
+              ? <FlatList
+              data={this.state.assetList}
+              renderItem={this._renderItem2}
+              keyExtractor={(data, index) => index}
+              />
+              : <Text>No items</Text>
+          }
+      </View>
+  )
+        }
+
+  if(this.state.filter == "asset"){
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Asset Inventory</Text>
+      <Text>View By</Text>
+      <Picker
+      style={{marginBottom: 20, marginLeft: 20, width: 200, alignSelf: 'center'}}
+        selectedValue={this.state.filter}  
+        onValueChange={this.updateFilter}>  
+      <Picker.Item label="Serial" value= "serial" />  
+      <Picker.Item label="Asset Type" value="asset" />  
+      <Picker.Item label="Asset Model" value="model" />  
+      </Picker>
+        {
+            this.state.assetList.length > 0
+            ? <FlatList
+            data={this.state.assetList}
+            renderItem={this._renderItem3}
+            keyExtractor={(item, index) => index}
+            />
+            : <Text>No items</Text>
+        }
+    </View>
+)
+      }
+
+      else{
+        return (
+          <View style={styles.container}>
+            <Text style={styles.title}>Asset Inventory</Text>
+            <Text>View By</Text>
+            <Picker
+            style={{marginBottom: 20, marginLeft: 20, width: 200, alignSelf: 'center'}}
+              selectedValue={this.state.filter}  
+              onValueChange={this.updateFilter}>  
+            <Picker.Item label="Serial" value= "serial" />  
+            <Picker.Item label="Asset Type" value="asset" />  
+            <Picker.Item label="Asset Model" value="model" />  
+            </Picker>
+              {
+                  this.state.assetList.length > 0
+                  ? <FlatList
+                  data={this.state.assetList}
+                  extraData={this.state.keyList}
+                  renderItem={this._renderItem}
+                  />
+                  : <Text>No items</Text>
+              }
+          </View>
+      )
+            }
+
+  }
+
+  
 }
 
 const styles = StyleSheet.create({
-  main: {
+  container: {
     flex: 1,
-    padding: 30,
-    flexDirection: 'column',
+    backgroundColor: '#fff',
+    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#D2B48C'
-  },
-  title: {
     marginBottom: 20,
-    fontSize: 25,
-    textAlign: 'center'
+    backgroundColor: 'tan'
+  },
+
+  item: {
+    marginTop: 20,
+    padding: 5,
+    alignItems: 'center',
+  },
+
+  title: {
+    marginBottom: 5,
+    fontSize: 20,
+    fontFamily: 'sans-serif-condensed',
+    alignItems: 'center'
+  },
+
+  content: {
+    marginTop: 10,
+    alignSelf: 'center',
+    fontSize: 15,
+    borderWidth: 2,
+    padding: 5,
+    borderRadius: 10,
+    backgroundColor: '#800020',
+    color: 'white',
+    fontWeight: 'bold',
+    paddingLeft: 10,
+    paddingRight: 10,
   }
 });

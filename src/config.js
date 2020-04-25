@@ -1,4 +1,5 @@
 import Firebase from 'firebase';
+
 let config = {
     apiKey: "AIzaSyBy06cAEJj0DVqWUOnnBSaUbO1ST8KjBfA",
     authDomain: "finalproject-d3ed6.firebaseapp.com",
@@ -11,3 +12,4 @@ let config = {
 };
 let app = Firebase.initializeApp(config);
 export const db = app.database();
+
